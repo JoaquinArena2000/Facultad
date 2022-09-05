@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1654719243 source:c:\users\joaquin arena\desktop\parcial ma—ana\parcial algortimo\main.c
+	<stdio.h>
+	<stdlib.h>
+	<conio.h>
+
