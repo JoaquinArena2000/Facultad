@@ -1,0 +1,283 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include<conio.h>
+#include <string.h>
+
+#define MAX 50
+
+typedef struct
+{
+   int codigo;
+   char modelo[10];
+   int cantidad;
+   float precio;
+} electrodomesticos;
+
+char menu();
+int altaArchivo();
+int cargarArchivo(electrodomesticos[], int);
+void modificar(electrodomesticos[],int);
+void ordenarmodelo(electrodomesticos[],int);
+void ordenarcodigo(electrodomesticos[],int);
+int busquedabinario(electrodomesticos[],int,int);
+int buscarletra(electrodomesticos[],int);
+void listar(electrodomesticos[],int);
+void listarletra(electrodomesticos ele[],int inicio,int cant);
+void ventas(electrodomesticos ele[],int cant);
+
+int main()
+{
+    electrodomesticos ele[MAX];
+    int cant=0,pos=0,buscar=0;
+    char opcion;
+do{
+    opcion=menu();
+    switch (opcion)
+    {
+    case '1':
+        {
+            if (altaArchivo()==-1) return -1;
+            break;
+        }
+    case '2':
+        {
+            cant=cargarArchivo(ele,cant);
+            ordenarcodigo(ele,cant);
+            modificar(ele,cant);
+            break;
+        }
+    case '3':
+        {
+            cant=cargarArchivo(ele,cant);
+            ordenarmodelo(ele,cant);
+            pos=buscarletra(ele,cant);
+            if (pos != -1) listarletra(ele,pos,cant);
+            break;
+        }
+    case '4':
+        {
+            cant=cargarArchivo(ele,cant);
+            ventas(ele,cant);
+            break;
+        }
+    case '9':
+        break;
+    default:
+        {
+            printf("error de ingreso");
+            break;
+        }
+    }
+}while (opcion != '9');
+return 0;
+}
+
+char menu()
+{
+    char opcion;
+    system("cls");
+    printf("\n\n1- crear el archivo productos");
+    printf("\n2- Modificar precio");
+    printf("\n3- Buscar por las dos primeras letras");
+    printf("\n4- Ventas");
+    printf("\n9- fin");
+    printf("\n\nopcion------>  ");
+    return opcion=getchar();
+
+}
+int altaArchivo()
+{
+    FILE *archivo;
+    electrodomesticos  Electrodomesticos;
+    char opcion='s';
+    archivo=fopen("electrodomestico.bin","ab");
+    if(archivo== NULL)   return -1;
+    srand(time(NULL));
+    while(opcion== 's'){
+    system("cls");
+    printf("Alta de productos");
+    printf("\n==================");
+    printf("\n\n\nEl codigo del producto  ");
+    Electrodomesticos.codigo= rand()%100;
+    printf("%d", Electrodomesticos.codigo);
+    printf("\nIngrese el modelo  ");
+    fflush(stdin);
+    gets(Electrodomesticos.modelo);
+    printf("\nIngrese la cantidad   ");
+    scanf("%d",&Electrodomesticos.cantidad);
+    printf("\nIngrese el importe  ");
+    fflush(stdin);
+    scanf("%f",&Electrodomesticos.precio);
+    fwrite(&Electrodomesticos, sizeof(Electrodomesticos),1,archivo);
+    printf("\n\nDesea seguir ingresando  ");
+    fflush(stdin);
+    opcion=getchar();
+    }
+    fclose(archivo);
+    return 0;
+}
+
+int cargarArchivo(electrodomesticos ele[], int cant)
+{
+    FILE *archivoentrada;
+    cant=0;
+    electrodomesticos Electrodomesticos;
+    archivoentrada=fopen("electrodomestico.bin","rb");
+    if(archivoentrada== NULL)
+        {printf("\n\nsale por error");
+         getche();
+         return -1;}
+    fread(&Electrodomesticos, sizeof(Electrodomesticos),1,archivoentrada);
+    while(!feof(archivoentrada)){
+        ele[cant]=Electrodomesticos;
+        fread(&Electrodomesticos, sizeof(electrodomesticos),1,archivoentrada);
+        cant++;
+        }
+    fclose(archivoentrada);
+    return cant;
+}
+
+void modificar(electrodomesticos ele[],int cant)
+{int auxcodigo,i=0,pos=0;
+    system("cls");
+    printf("\n\nModificar precio\n\n");
+
+    printf("\n\t\tCODIGO             MODELO           PRECIO         CANTIDAD\n\n\n");
+    for(i=0;i<cant;i++)
+    {
+        printf("\t\t   %i                         %s                %f                  %d\n\n",ele[i].codigo ,ele[i].modelo ,ele[i].precio, ele[i].cantidad);
+    }
+
+    printf("\n\n\nIngrese el codigo a modificar precio");
+    scanf("%d",&auxcodigo);
+    pos=busquedabinario(ele,auxcodigo,cant);
+    if (pos >= 0)
+     {
+        printf("\n\n\nel precios es %f\n",ele[pos].precio);
+        getche();
+        printf("\n\nIngrese el nuevo precio   ");
+        scanf("%f",&ele[pos].precio);}
+    else printf("\n\nno encontro el producto\n");
+}
+void ordenarmodelo(electrodomesticos ele[],int cant)
+{
+
+    int i,j,b=1;
+    electrodomesticos aux;
+    for(i=0; i<cant-1 && b==1;i++){
+        b=0;
+        for(j=0;j<cant-i-1;i++)
+        {
+            if(strcmp(ele[j].modelo,ele[j+1].modelo)>0){
+                aux=ele[j];
+                ele[j]=ele[j+1];
+                ele[j+1]=aux;
+                b=1;
+            }
+        }
+    }
+
+}
+void ordenarcodigo(electrodomesticos ele[],int cant)
+{int i,j,b=1;
+electrodomesticos auxele;
+for(i=0;i<cant && b==1;i++){
+    b=0;
+    for(j=0;j<j-i-1;j++){
+        if(ele[j].codigo > ele[j+1].codigo){
+            auxele=ele[j];
+            ele[j]=ele[j+1];
+            ele[j+1]=auxele;
+            b=1;
+        }
+    }
+
+}
+
+}
+int busquedabinario(electrodomesticos ele[],int auxcodigo,int cant)
+{
+    // busqueda binaria
+    int minimo,maximo,medio;
+    minimo=0;
+    maximo=cant-1;
+    if(ele[minimo].codigo == auxcodigo) return minimo;
+    if (ele[maximo].codigo== auxcodigo) return maximo;
+    while(maximo-minimo > 1){
+        medio=(maximo+minimo)/2;
+        if(ele[medio].codigo == auxcodigo) return medio;
+        if (auxcodigo > ele[medio].codigo) minimo = medio; else maximo = medio;  }
+    return -1;
+}
+void listarletra(electrodomesticos ele[],int inicio,int cant)
+{
+    int i;
+    system ("cls");
+    printf("listar");
+    printf("\n=======");
+
+    for(i=inicio; i<cant;i++){
+        printf("\n\n\ncodigo: %d\nmodelo: %s\nprecio %f",ele[i].codigo,ele[i].modelo,ele[i].precio);
+        getche();
+    }
+
+}
+int buscarletra(electrodomesticos ele[],int cant)
+{
+    // busqueda binaria
+    int i=0;
+    char letrabus[2];
+    char auxmodelo[2];
+    printf("Ingrese las dos primeras letras a buscar  ");
+    fflush(stdin);
+    gets(letrabus);
+    for(i=0; i<cant;i++)
+    {
+        auxmodelo[0]=ele[i].modelo[0];
+        auxmodelo[1]=ele[i].modelo[1];
+    printf("\n\n el vector tiene %s %s  busco %s ", ele[i].modelo,auxmodelo, letrabus);
+    getche();
+        /*if (ele[0].modelo== letrabus[0] && ele[1].modelo == letrabus[1])
+            {printf("\n\nencontro el producto/n");return i;}
+*/
+       if (strcmp(auxmodelo,letrabus)== 0)
+       {
+           printf("\n\nEncontro el articulo");
+           getche();
+           return i;
+           }
+    }
+
+    return -1;
+}
+void ventas(electrodomesticos ele[],int cant)
+{
+    int auxcodigo,i=0,pos=0;
+    char sino='s';
+    system("cls");
+    printf("Venta de producto");
+    do{
+    printf("\n\n\nIngrese el codigo del producto  ");
+    scanf("%d",&auxcodigo);
+    pos=0;
+    pos=busquedabinario(ele,auxcodigo,cant);
+    if (pos >= 0)
+     {
+        printf("\n\n\nel precios es %f\n",ele[pos].precio);
+        printf("\nLa descripcion es %s", ele[pos].modelo);
+        printf("\nLa cantidad es %d",ele[pos].cantidad );
+        getche();
+        printf("\n\nIngrese cantidad vendida   ");
+        scanf("%d",&i);
+        if (i < ele[pos].cantidad)
+            ele[pos].cantidad= ele[pos].cantidad-i;
+        else
+            {printf("\n\nNo tengo esa cantidad");getche();}
+
+    }
+    else printf("\n\nno encontro el producto\n");
+    printf("\n\nQuiere seguir vendiendo  ");
+    fflush(stdin);
+    sino=getchar();
+    }while(sino == 's');
+}
