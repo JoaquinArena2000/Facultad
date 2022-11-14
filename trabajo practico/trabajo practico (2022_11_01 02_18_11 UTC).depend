@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1636342650 source:c:\users\omar\desktop\unpaz analista de sistemas\introduccion a la programacion l 18-22hs\ejercicios\trabajo practico\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+
