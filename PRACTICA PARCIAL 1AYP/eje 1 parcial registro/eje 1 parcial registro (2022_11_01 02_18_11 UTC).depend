@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1651022667 source:c:\users\joaquin arena\desktop\lgti\algoritmos y programacion a1\eje 1 parcial registro\main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<string.h>
+

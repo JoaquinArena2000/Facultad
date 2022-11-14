@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1651777340 source:c:\users\joaquin arena\desktop\lgti\algoritmos y programacion a1\4\parcial registro 30\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+

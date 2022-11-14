@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1650229136 source:c:\users\joaquin arena\desktop\lgti\algoritmos y programacion a1\ejercico 1 tipo parcial\main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+
