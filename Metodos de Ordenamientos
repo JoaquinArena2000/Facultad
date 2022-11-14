@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <stdlib.h>
+/*. Hacer un programa que permita leer 20 n�meros enteros (positivos y negativos)
+distintos de cero. Mostrar el vector tal como fue ingresado y luego mostrar los positivos
+ordenados en forma decreciente y por �ltimo mostrar los negativos ordenados en forma
+creciente
+*/
+
+void ordenamiento_decreciente(int vector[]);
+void ordenamiento_creciente(int vector []);
+int main()
+{
+   int vector[10]={1,3,4,2,9,7,6,8, 5 ,10};
+   printf("TENEMOS EL SIGUIENTE VECTOR --> ");
+   for (int i=0;i<10;i++)
+       printf(" [%d] ", vector[i]);
+
+   int aux_decreciente;
+   int aux_creciente;
+   ordenamiento_decreciente(vector);
+   ordenamiento_creciente(vector);
+    return 0;
+
+}
+void ordenamiento_decreciente(int vector[] )
+{
+    int i , j ;
+    int aux_decreceinte ;
+    printf("\n\nVECTOR ORDENADO DE FORMA DECRECIENTE\n\n");
+        for (i=0;i<10;i++)
+        {
+             for(j=0;j<10;j++)
+        {
+            if (vector[j]>vector[j-1])
+            {
+                aux_decreceinte= vector[j-1];
+                vector[j-1]=vector[j];
+                vector[j]=aux_decreceinte;
+            }
+        }
+        }
+
+        for (i=0;i<10;i++)
+        {
+            printf(" [%d] " , vector[i]);
+        }
+}
+void ordenamiento_creciente(int vector[])
+{
+   int i , j ;
+    int aux_creciente ;
+    printf("\n\nVECTOR ORDENADO DE FORMA CRECIENTE\n\n");
+        for (i=0;i<10;i++)
+        {
+             for(j=0;j<10;j++)
+        {
+            if (vector[j]>vector[j+1])
+            {
+                aux_creciente= vector[j+1];
+                vector[j+1]=vector[j];
+                vector[j]=aux_creciente;
+            }
+        }
+        }
+
+        for (i=0;i<10;i++)
+        {
+            printf(" [%d] " , vector[i]);
+        }
+}
